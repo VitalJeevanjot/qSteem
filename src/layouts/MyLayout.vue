@@ -29,15 +29,15 @@
               <q-card-separator />
               <q-card-actions align="between">
                 <div class="left">
-                  <span class="justify-center text-grey">0 </span>
+                  <span class="justify-center text-grey">{{item.upvotes}}</span>
                   <span class="justify-center text-grey"> likes</span>
                   <span class="justify-center text-grey"> |</span>
                   <q-btn flat color="black" icon="comment" />
-                  <span class="justify-center text-grey">0</span>
+                  <span class="justify-center text-grey">{{item.comments}}</span>
                 </div>
                 <div class="right">
                   <span class="justify-center text-grey">$ </span>
-                  <span class="justify-center text-grey">0.00</span>
+                  <span class="justify-center text-grey">{{item.payoutval}}</span>
                   <span class="justify-center text-grey"> |</span>
                   <q-btn flat color="black" :icon="icon" />
                 </div>
@@ -87,13 +87,19 @@ export default {
             this.items.push({
               title: discussion[i].title,
               author: discussion[i].author,
-              image: images[0]
+              image: images[0],
+              upvotes: discussion[i].net_votes,
+              comments: discussion[i].children,
+              payoutval: Number(parseFloat(discussion[i].pending_payout_value.split(' ')[0]).toFixed(2))
             })
           } catch (e) {
             this.items.push({
               title: discussion[i].title,
               author: discussion[i].author,
-              image: require('../../img/num.png')
+              image: require('../../img/num.png'),
+              upvotes: discussion[i].net_votes,
+              comments: discussion[i].children,
+              payoutval: Number(parseFloat(discussion[i].pending_payout_value.split(' ')[0]).toFixed(2))
             })
           }
           console.log(discussion[i])
