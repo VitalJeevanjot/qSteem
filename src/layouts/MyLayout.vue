@@ -2,7 +2,7 @@
 <q-layout>
   <q-layout-header :reveal="reveal">
     <q-toolbar color="white">
-      <q-toolbar-title class="text-green" :inverted="$q.theme === 'ios'">
+      <q-toolbar-title class="text-teal accent-1-text" :inverted="$q.theme === 'ios'">
         STEEM
       </q-toolbar-title>
     </q-toolbar>
