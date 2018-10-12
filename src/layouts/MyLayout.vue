@@ -68,12 +68,22 @@ export default {
         for (let i = 0; i < 11; i++) {
           // Get user info
           let jsonM = JSON.parse(discussion[i].json_metadata)
+          let images = []
+          images = jsonM.image
           // User account retreival profile_pic_url ppu
-          this.items.push({
-            title: discussion[i].title,
-            author: discussion[i].author,
-            image: jsonM.image[0]
-          })
+          try {
+            this.items.push({
+              title: discussion[i].title,
+              author: discussion[i].author,
+              image: images[0]
+            })
+          } catch (e) {
+            this.items.push({
+              title: discussion[i].title,
+              author: discussion[i].author,
+              image: require('../../img/num.png')
+            })
+          }
           console.log(discussion[i])
         }
       })
