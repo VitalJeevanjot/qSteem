@@ -71,10 +71,14 @@ export default {
     func: async function () {
       await this.$steemClient.database.getDiscussions('trending', {
         tag: '',
-        limit: 11
+        limit: 12,
+        start_permlink: window.permlink,
+        start_author: window.author
       }).then((discussion) => {
         for (let i = 0; i < 11; i++) {
           // Get user info
+          window.author = discussion[i + 1].author
+          window.permlink = discussion[i + 1].permlink
           let jsonM = JSON.parse(discussion[i].json_metadata)
           let images = []
           images = jsonM.image
@@ -96,6 +100,10 @@ export default {
         }
       })
     }
+  },
+  mounted () {
+    window.permlink = undefined
+    window.author = undefined
   }
 }
 </script>
