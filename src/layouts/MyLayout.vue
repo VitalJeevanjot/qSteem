@@ -1,9 +1,9 @@
 <template>
-  <q-layout>
+<q-layout>
   <q-layout-header :reveal="reveal">
     <q-toolbar color="white">
-      <q-toolbar-title class="text-black" :inverted="$q.theme === 'ios'">
-        DLIKE
+      <q-toolbar-title class="text-green" :inverted="$q.theme === 'ios'">
+        STEEM
       </q-toolbar-title>
     </q-toolbar>
   </q-layout-header>
@@ -38,11 +38,11 @@
                 <span class="justify-center text-grey">$ </span>
                 <span class="justify-center text-grey">0.00</span>
                 <span class="justify-center text-grey"> |</span>
-                <q-btn flat color="black" icon="favorite" />
+                <q-btn flat color="black" :icon="icon" />
               </div>
             </q-card-actions>
           </q-card>
-          <q-item-separator />
+          <q-item-separator/>
         </q-item>
       </q-list>
     </q-page>
@@ -55,56 +55,28 @@ export default {
   data () {
     return {
       items: [],
-      reveal: true
+      reveal: true,
+      icon: 'keyboard_arrow_up'
     }
   },
   methods: {
-    getAcc: async function (user) {
-      var account
-      var profilePicUrl
-      await this.$steemClient.database.getAccounts([user]).then(function (defs) {
-        account = defs
-        let json = JSON.parse(account[0].json_metadata)
-        profilePicUrl = json.profile.profile_image
-        console.log(profilePicUrl + '-----------------------------------' + user)
-      })
-      console.log(profilePicUrl)
-      return profilePicUrl
-    },
     func: async function () {
-      let ip = 0
-      while (ip < 7) {
-        await this.$steemClient.database.getDiscussions('trending', {
-          tag: 'dlike',
-          limit: 11
-        }).then((discussion) => {
-          for (let i = 0; i < 11; i++) {
-            // Get user info
-            let jsonM = JSON.parse(discussion[i].json_metadata)
-            if (jsonM.community === 'dlike') {
-              // User account retreival profile_pic_url ppu
-              this.getAcc(discussion[i].author).then((data) => {
-                if (jsonM.image[0] !== 'h') {
-                  this.items.push({
-                    title: discussion[i].title.toString(),
-                    image: jsonM.image[0],
-                    author: discussion[i].author,
-                    profilePic: data
-                  })
-                } else if (jsonM.image[0] === 'h') {
-                  this.items.push({
-                    title: discussion[i].title.toString(),
-                    image: jsonM.image,
-                    author: discussion[i].author,
-                    profilePic: data
-                  })
-                }
-                ip++
-              })
-            }
-          }
-        })
-      }
+      await this.$steemClient.database.getDiscussions('trending', {
+        tag: '',
+        limit: 11
+      }).then((discussion) => {
+        for (let i = 0; i < 11; i++) {
+          // Get user info
+          let jsonM = JSON.parse(discussion[i].json_metadata)
+          // User account retreival profile_pic_url ppu
+          this.items.push({
+            title: discussion[i].title,
+            author: discussion[i].author,
+            image: jsonM.image[0]
+          })
+          console.log(discussion[i])
+        }
+      })
     }
   },
   mounted () {
