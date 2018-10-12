@@ -62,7 +62,9 @@ module.exports = function(ctx) {
         'QCardSeparator',
         'QCardActions',
         'QItemTile',
-        'QItemSeparator'
+        'QItemSeparator',
+        'QInfiniteScroll',
+        'QSpinnerDots'
       ],
       directives: [
         'Ripple'

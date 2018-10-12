@@ -10,40 +10,45 @@
   <q-page-container>
     <q-page class="row justify-center">
       <q-list no-border>
-        <q-item v-for='item in items' :key='item.title' sparse>
-          <q-card inline class="q-ma-sm no-wrap" style="width: auto">
-            <q-item>
-              <q-item-side :avatar="item.profilePic" />
-              <q-item-main>
-                <q-item-tile label>{{item.author}}</q-item-tile>
-                <q-item-tile sublabel>Subhead</q-item-tile>
-              </q-item-main>
-            </q-item>
-            <q-card-media align="center">
-              <img :src="item.image" style="width: 95vw; height: 70vw; object-fit: cover;" class="cover" />
-            </q-card-media>
-            <q-card-title class="relative-position">
-              <div>{{item.title}}</div>
-            </q-card-title>
-            <q-card-separator />
-            <q-card-actions align="between">
-              <div class="left">
-                <span class="justify-center text-grey">0 </span>
-                <span class="justify-center text-grey"> likes</span>
-                <span class="justify-center text-grey"> |</span>
-                <q-btn flat color="black" icon="comment" />
-                <span class="justify-center text-grey">0</span>
-              </div>
-              <div class="right">
-                <span class="justify-center text-grey">$ </span>
-                <span class="justify-center text-grey">0.00</span>
-                <span class="justify-center text-grey"> |</span>
-                <q-btn flat color="black" :icon="icon" />
-              </div>
-            </q-card-actions>
-          </q-card>
-          <q-item-separator/>
-        </q-item>
+        <q-infinite-scroll :handler="refresher">
+          <q-item v-for='item in items' :key='item.title' sparse>
+            <q-card inline class="q-ma-sm no-wrap" style="width: auto">
+              <q-item>
+                <q-item-side :avatar="item.profilePic" />
+                <q-item-main>
+                  <q-item-tile label>{{item.author}}</q-item-tile>
+                  <q-item-tile sublabel>Subhead</q-item-tile>
+                </q-item-main>
+              </q-item>
+              <q-card-media align="center">
+                <img :src="item.image" style="width: 95vw; height: 70vw; object-fit: cover;" class="cover" />
+              </q-card-media>
+              <q-card-title class="relative-position">
+                <div>{{item.title}}</div>
+              </q-card-title>
+              <q-card-separator />
+              <q-card-actions align="between">
+                <div class="left">
+                  <span class="justify-center text-grey">0 </span>
+                  <span class="justify-center text-grey"> likes</span>
+                  <span class="justify-center text-grey"> |</span>
+                  <q-btn flat color="black" icon="comment" />
+                  <span class="justify-center text-grey">0</span>
+                </div>
+                <div class="right">
+                  <span class="justify-center text-grey">$ </span>
+                  <span class="justify-center text-grey">0.00</span>
+                  <span class="justify-center text-grey"> |</span>
+                  <q-btn flat color="black" :icon="icon" />
+                </div>
+              </q-card-actions>
+            </q-card>
+            <q-item-separator/>
+          </q-item>
+          <div class="row justify-center" style="margin-bottom: 50px;">
+            <q-spinner-dots slot="message" :size="40" />
+          </div>
+        </q-infinite-scroll>
       </q-list>
     </q-page>
   </q-page-container>
@@ -60,6 +65,9 @@ export default {
     }
   },
   methods: {
+    refresher (index, done) {
+      this.func().then((e) => { done() })
+    },
     func: async function () {
       await this.$steemClient.database.getDiscussions('trending', {
         tag: '',
@@ -88,11 +96,6 @@ export default {
         }
       })
     }
-  },
-  mounted () {
-    this.func().catch(console.error)
-    // just so you can do it this way too
-    // this.mainy().catch(console.error)
   }
 }
 </script>
