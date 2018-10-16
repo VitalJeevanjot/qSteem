@@ -1,6 +1,6 @@
 <template>
 <q-layout>
-  <q-layout-header :reveal="reveal">
+  <q-layout-header :reveal="reveal" class="justify-center">
     <q-toolbar color="white">
       <q-toolbar-title class="text-teal accent-1-text" :inverted="$q.theme === 'ios'">
         STEEM
@@ -8,11 +8,18 @@
     </q-toolbar>
   </q-layout-header>
   <q-page-container>
+    <q-tabs animated swipeable inverted color="secondary" align="justify">
+      <q-tab name="created" slot="title" icon="access_time" @click="type = 'created'; check()"/>
+      <q-tab name="hot" slot="title" icon="whatshot" @click="type = 'hot'; check()"/>
+      <q-tab name="trending" slot="title" icon="trending_up" @click="type = 'trending'; check()"/>
+      <q-tab name="promoted" slot="title" icon="attach_money" @click="type = 'promoted'; check()"/>
+    </q-tabs>
     <q-page class="row justify-center">
+      <q-pull-to-refresh :handler="refresh">
       <q-list no-border>
         <q-infinite-scroll :handler="refresher">
           <q-item v-for='item in items' :key='item.title' sparse>
-            <q-card inline class="q-ma-sm no-wrap" style="width: auto">
+            <q-card inline class="q-ma-sm no-wrap" style="width: 300px">
               <q-item>
                 <q-item-side :avatar="item.profilePic" />
                 <q-item-main>
@@ -21,7 +28,7 @@
                 </q-item-main>
               </q-item>
               <q-card-media align="center">
-                <img :src="item.image" style="width: 95vw; height: 70vw; object-fit: cover;" class="cover" />
+                <img :src="item.image" style="width: 350px; height: 300px; object-fit: cover;" class="cover" />
               </q-card-media>
               <q-card-title class="relative-position">
                 <div>{{item.title}}</div>
@@ -50,6 +57,7 @@
           </div>
         </q-infinite-scroll>
       </q-list>
+    </q-pull-to-refresh>
     </q-page>
   </q-page-container>
 </q-layout>
@@ -61,15 +69,22 @@ export default {
     return {
       items: [],
       reveal: true,
-      icon: 'keyboard_arrow_up'
+      icon: 'keyboard_arrow_up',
+      type: ''
     }
   },
   methods: {
     refresher (index, done) {
+      console.log('refreses')
       this.func().then((e) => { done() })
     },
+    refresh (done) {
+      this.check()
+      done()
+    },
     func: async function () {
-      await this.$steemClient.database.getDiscussions('trending', {
+      console.log('calleddsd')
+      await this.$steemClient.database.getDiscussions(this.type, {
         tag: '',
         limit: 12,
         start_permlink: window.permlink,
@@ -105,9 +120,17 @@ export default {
           console.log(discussion[i])
         }
       })
+    },
+    check: function () {
+      console.log('called')
+      this.items = []
+      window.permlink = undefined
+      window.author = undefined
+      this.func()
     }
   },
   mounted () {
+    this.type = 'trending'
     window.permlink = undefined
     window.author = undefined
   }

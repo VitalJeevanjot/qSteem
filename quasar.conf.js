@@ -64,7 +64,12 @@ module.exports = function(ctx) {
         'QItemTile',
         'QItemSeparator',
         'QInfiniteScroll',
-        'QSpinnerDots'
+        'QSpinnerDots',
+        'QTabs',
+        'QTabPane',
+        'QTab',
+        'QRouteTab',
+        'QPullToRefresh'
       ],
       directives: [
         'Ripple'
