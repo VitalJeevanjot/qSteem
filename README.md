@@ -6,7 +6,7 @@ A steem and quasar based app in active development and the devepment progress ca
 - Run `yarn` in project folder(Extracted)
 - Run `Quasar dev`
 
-# The project has been discontinued, Thanks for for donating and helping through the process, While the project code is open so you can use it's current developed mechanisms that are based on Quasar and Vue. Thank you all.
+# The project has been discontinued, Thanks for donating and helping through the process, While the project code is open so you can use it's current developed mechanisms that are based on Quasar and Vue. Thank you all.
 
 ## What is this Project:
 This is a Quasar and Dsteem based new Steem App for all supported platforms ( Android/ IOS/UWP/Browser/Electron ) to give the most demanding facilities of Steem over these platform.
